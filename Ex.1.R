@@ -46,16 +46,22 @@ product_smartphone <- product_code
 product_tv <- product_code
 product_laptop <- product_code
 product_tablet <- product_code
-csvtbl %>% 
-  gather(company, name, starts_with("company_")) %>% 
-  mutate(present = 1) %>% 
-  select(-company) %>% 
-  spread(name, present, fill = 0)
+binary_variable <-function(product,letter){
+  if (product==letter){
+    product =1
+  }else {
+    product=0
+  }
+}
+product_smartphone <- vapply(product_smartphone,"p",FUN=binary_variable,FUN.VALUE=numeric(1))
+product_tv <-vapply(product_tv,letter="v",FUN=binary_variable,FUN.VALUE=numeric(1))
+product_laptop <-vapply(product_laptop,"x",FUN=binary_variable,FUN.VALUE=numeric(1))
+product_tablet <- vapply(product_tablet,"q",FUN=binary_variable,FUN.VALUE=numeric(1))
+company_philips <-vapply(company_philips,"philips",FUN=binary_variable,FUN.VALUE=numeric(1))
+company_akzo <-vapply(company_akzo,letter="akzo",FUN=binary_variable,FUN.VALUE=numeric(1))
+company_van_houten <-vapply(company_van_houten,letter="van houten",FUN=binary_variable,FUN.VALUE=numeric(1))
+company_unilever <-vapply(company_unilever,letter="unilever",FUN=binary_variable,FUN.VALUE=numeric(1))
 
-csvtbl %>% 
-  gather(product_code, name, starts_with("product_")) %>% 
-  mutate(present = 1) %>% 
-  select(-product_code) %>% 
-  spread(name, present, fill = 0)
-
-
+csvtbl <-cbind(csvtbl,product_smartphone,product_tv,product_laptop,product_tablet)
+csvtbl <-cbind(csvtbl,company_philips,company_akzo,company_van_houten,company_unilever)
+glimpse(csvtbl)
